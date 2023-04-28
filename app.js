@@ -54,9 +54,6 @@ connection.connect(function(err) {
 });
 
 
-// const saltPassword = (password) => {
-//   return crypto.createHash("sha512").update(password).digest("base64");
-// };
 
 
 app.set('view engine', 'html');
@@ -68,71 +65,6 @@ app.get('/', (req, res) => {
 });
 
 
-// router.get('/signup/:email', async (req, res, next) => {
-//   console.log(req,'req')
-//   console.log(res,'res')
-//   const email = req.params.email
-//   console.log(req.params.email,'req.params.email')
-//   const find = await User.findOne({where:{useremail:email}})
-//     if(!find){
-//       check = true
-//       err(res, 200)
-//     }else{
-//       err(res, 409, 'It is already in registeration.')
-//     }
-// })
-
-
-
-    
-// app.post('/register', (req, res) => {
-//   connection.query(`select * from users where emailAddress = '${req.body.email}'`, (err,result)=>{
-//     if (result === undefined  || 0){
-//       return res.send({
-//         code : 200
-//        })
-//      }
-//      console.log(res.send,'result')
-//     if(result.length === 0){
-//       return res.send({
-//         code : 200
-//       })
-//      }else{
-//       return res.send({
-//         code : 409
-//       })
-//      }
-   
-//   })
-// })
-
-
-
-// app.post('/register', (req, res) => {
-//   const password = req.body.pw
-//   const hashPassword = crypto.createHash('sha512').update(password).digest("hex");
-
-//   let qq = `select * from users where emailAddress = '${req.body.email}'`;
-//   connection.query(qq, (err, result) => {
-//     if (result.length < 1){
-//       return res.send({
-//         code : 409
-//        })
-//      } else {
-//       return res.send ({
-//         code : 200 
-//       })
-//      }
-// });
-
-//   let query = `INSERT INTO users(firstName, lastName, emailAddress, PhoneNumber, password) VALUES ('${req.body.firstName}','${req.body.lastName}','${req.body.email}', '${req.body.phone}', '${hashPassword}')`;
-//   connection.query(query, (err, result) => {
-//       return res.send({
-//         code : 200
-//       }) // we have here an object that has only the inserted id  
-    
-// });
-// });
 app.post('/register', (req, res) => {
   const password = req.body.pw
   const hashPassword = crypto.createHash('sha512').update(password).digest("hex");
@@ -158,7 +90,6 @@ app.post('/register', (req, res) => {
 
 
 app.post('/login', (req, res) => {
-
   const password = req.body.pw
 
   const hashPassword = crypto.createHash('sha512').update(password).digest("hex");
@@ -183,7 +114,7 @@ app.post('/login', (req, res) => {
         return res.send({code : 200, token : token });
     });
 })
-})
+}) 
 
 
 
@@ -194,20 +125,43 @@ app.post('/removeCookie', (req, res) => {
 
 
 
-app.get('/productDetail', (req, res) => {
+app.get('/productMain', (req, res) => {
   connection.query('select * from product', (err,result)=>{
-    console.log('prdoucDetail')
+    console.log('productMain')
     res.send(result)
 })
 })
-//post jwt
 
-app.get('/productDetailPage', (req, res) => {
-  connection.query('select * from productDetailPage', (err,result)=>{
-    console.log('productDetailPage')
-    res.send(result)
-})
-})
+app.get('/productDetail/:id', (req, res) => {
+  console.log(req.params,'paramssss')
+  
+  connection.query(`SELECT * FROM product WHERE id = '${req.params.id}'` ,(err, result) => {
+    if (err) throw err;
+    if (result.length === 0) {
+      console.log('No product found');
+      res.send('No product found');
+    } else {
+      console.log(result[0]);
+      console.log('Product Detail');
+      res.send(result[0]);
+    }
+  })
+});
+// app.get('/productDetail/:id', (req, res) => {
+//   console.log(req.params,'paramssss')
+  
+//   connection.query(`SELECT * FROM product WHERE id = '?'`, [req.params.id] ,(err, result) => {
+//     if (err) throw err;
+//     if (result.length === 0) {
+//       console.log('No product found');
+//       res.send('No product found');
+//     } else {
+//       console.log(result[0]);
+//       console.log('Product Detail');
+//       res.send(result[0]);
+//     }
+//   })
+// });
 
 
 app.listen(port, () => {
