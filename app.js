@@ -147,22 +147,8 @@ app.get('/productDetail/:id', (req, res) => {
     }
   })
 });
-// app.get('/productDetail/:id', (req, res) => {
-//   console.log(req.params,'paramssss')
-  
-//   connection.query(`SELECT * FROM product WHERE id = '?'`, [req.params.id] ,(err, result) => {
-//     if (err) throw err;
-//     if (result.length === 0) {
-//       console.log('No product found');
-//       res.send('No product found');
-//     } else {
-//       console.log(result[0]);
-//       console.log('Product Detail');
-//       res.send(result[0]);
-//     }
-//   })
-// });
 
+// app.get('/')
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
